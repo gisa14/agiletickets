@@ -3,6 +3,12 @@ package br.com.caelum.agiletickets.models;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.util.List;
+
+
+import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
+import org.junit.Assert;
 import org.junit.Test;
 
 public class EspetaculoTest {
@@ -79,5 +85,49 @@ public class EspetaculoTest {
 		sessao.setIngressosReservados(quantidade);
 
 		return sessao;
+	}
+	@Test
+	public void espetaculoCriaSessoesComDataInicioMaiorQueDataFimRetornaZeroSessoes(){
+		Espetaculo espetaculo = new Espetaculo();
+		List<Sessao> sessoes = espetaculo.criaSessoes(new LocalDate(2013, 12, 1), new LocalDate(2013, 11, 1), new LocalTime(17,0), Periodicidade.DIARIA);
+		Assert.assertEquals(sessoes.size(),0);
+	}
+	
+	@Test
+	public void espetaculoCriaSessoesComDataInicioIgualADataFimRetorna1Sessao(){
+		Espetaculo espetaculo = new Espetaculo();
+		LocalDate dataAtual = new LocalDate();
+		LocalTime horaEspetaculo = new LocalTime(21,0);
+		List<Sessao> sessoes = espetaculo.criaSessoes(dataAtual, dataAtual, horaEspetaculo, Periodicidade.DIARIA);
+		Assert.assertEquals(sessoes.size(),1);
+		sessoes = espetaculo.criaSessoes(dataAtual, dataAtual, horaEspetaculo, Periodicidade.SEMANAL);
+		Assert.assertEquals(sessoes.size(),1);
+	}
+	
+	@Test
+	public void espetaculoCriaSessoesComDataFinal7DiasDepoisDaInicialSemanalRetorna2Sessoes(){
+		Espetaculo espetaculo = new Espetaculo();
+		LocalDate dataAtual = new LocalDate();
+		LocalTime horaEspetaculo = new LocalTime(21,0);
+		List<Sessao> sessoes = espetaculo.criaSessoes(dataAtual, dataAtual.plusDays(7), horaEspetaculo, Periodicidade.SEMANAL);
+		Assert.assertEquals(sessoes.size(),2);
+	}
+	
+	@Test
+	public void espetaculoCriaSessoesComDataFinal7DiasDepoisDaInicialDiarioRetorna8Sessoes(){
+		Espetaculo espetaculo = new Espetaculo();
+		LocalDate dataAtual = new LocalDate();
+		LocalTime horaEspetaculo = new LocalTime(21,0);
+		List<Sessao> sessoes = espetaculo.criaSessoes(dataAtual, dataAtual.plusDays(7), horaEspetaculo, Periodicidade.DIARIA);
+		Assert.assertEquals(sessoes.size(),8);
+	}
+	
+	@Test
+	public void espetaculoCriaSessoesComAlgumaEntradaNullLancaException(){
+		try {
+			
+//			Assert.fail();
+		} catch (Exception e) {
+		}
 	}
 }

@@ -50,17 +50,22 @@ public class EspetaculosController {
 		// aqui eh onde fazemos as varias validacoes
 		// se nao tiver nome, avisa o usuario
 		// se nao tiver descricao, avisa o usuario
-		if (Strings.isNullOrEmpty(espetaculo.getNome())) {
-			validator.add(new ValidationMessage("Nome do espetáculo nao pode estar em branco", ""));
-		}
-		if (Strings.isNullOrEmpty(espetaculo.getDescricao())) {
-			validator.add(new ValidationMessage("Descricao do espetaculo nao pode estar em branco", ""));
-		}
+		verificaEhNull(espetaculo.getNome(),"Nome do espetáculo nao pode estar em branco");
+		verificaEhNull(espetaculo.getDescricao(),"Descricao do espetaculo nao pode estar em branco");
+		
 		validator.onErrorRedirectTo(this).lista();
 
 		agenda.cadastra(espetaculo);
 		result.redirectTo(this).lista();
 	}
+
+	private void verificaEhNull(String s, String mensagem) {
+		if (Strings.isNullOrEmpty(s)) {
+			validator.add(new ValidationMessage(mensagem, ""));
+		}
+	}
+	
+	
 
 
 	@Get @Path("/sessao/{id}")
@@ -98,6 +103,7 @@ public class EspetaculosController {
 		result.redirectTo(IndexController.class).index();
 	}
 
+	
 	@Get @Path("/espetaculo/{espetaculoId}/sessoes")
 	public void sessoes(Long espetaculoId) {
 		Espetaculo espetaculo = carregaEspetaculo(espetaculoId);
