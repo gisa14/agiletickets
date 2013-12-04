@@ -5,13 +5,17 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
-
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 public class EspetaculoTest {
+
+	private Espetaculo espetaculo;
+	private LocalDate dataAtual;
+	private LocalTime horaEspetaculo;
 
 	@Test
 	public void deveInformarSeEhPossivelReservarAQuantidadeDeIngressosDentroDeQualquerDasSessoes() {
@@ -54,7 +58,7 @@ public class EspetaculoTest {
 		ivete.getSessoes().add(sessaoComIngressosSobrando(3));
 		ivete.getSessoes().add(sessaoComIngressosSobrando(4));
 
-		assertTrue(ivete.Vagas(5, 3));
+		assertTrue(ivete.vagas(5, 3));
 	}
 
 	@Test
@@ -65,7 +69,7 @@ public class EspetaculoTest {
 		ivete.getSessoes().add(sessaoComIngressosSobrando(3));
 		ivete.getSessoes().add(sessaoComIngressosSobrando(4));
 
-		assertTrue(ivete.Vagas(10, 3));
+		assertTrue(ivete.vagas(10, 3));
 	}
 
 	@Test
@@ -76,7 +80,7 @@ public class EspetaculoTest {
 		ivete.getSessoes().add(sessaoComIngressosSobrando(2));
 		ivete.getSessoes().add(sessaoComIngressosSobrando(2));
 
-		assertFalse(ivete.Vagas(5, 3));
+		assertFalse(ivete.vagas(5, 3));
 	}
 
 	private Sessao sessaoComIngressosSobrando(int quantidade) {
@@ -86,48 +90,78 @@ public class EspetaculoTest {
 
 		return sessao;
 	}
+
 	@Test
-	public void espetaculoCriaSessoesComDataInicioMaiorQueDataFimRetornaZeroSessoes(){
-		Espetaculo espetaculo = new Espetaculo();
-		List<Sessao> sessoes = espetaculo.criaSessoes(new LocalDate(2013, 12, 1), new LocalDate(2013, 11, 1), new LocalTime(17,0), Periodicidade.DIARIA);
-		Assert.assertEquals(sessoes.size(),0);
+	public void espetaculoCriaSessoesComDataInicioMaiorQueDataFimRetornaZeroSessoes() {
+		Assert.assertNull(espetaculo.criaSessoes(dataAtual.plusDays(1),
+				dataAtual, horaEspetaculo, Periodicidade.DIARIA));
+		Assert.assertNull(espetaculo.criaSessoes(dataAtual.plusDays(1),
+				dataAtual, horaEspetaculo, Periodicidade.SEMANAL));
+	}
+
+	@Test
+	public void espetaculoCriaSessoesComDataInicioIgualADataFimRetorna1Sessao() {
+		List<Sessao> sessoes = espetaculo.criaSessoes(dataAtual, dataAtual,
+				horaEspetaculo, Periodicidade.DIARIA);
+		Assert.assertEquals(sessoes.size(), 1);
+		sessoes = espetaculo.criaSessoes(dataAtual, dataAtual, horaEspetaculo,
+				Periodicidade.SEMANAL);
+		Assert.assertEquals(sessoes.size(), 1);
+	}
+
+	@Test
+	public void espetaculoCriaSessoesComDataFinal7DiasDepoisDaInicialComPeriodicidadeSemanalRetorna2Sessoes() {
+		List<Sessao> sessoes = espetaculo.criaSessoes(dataAtual,
+				dataAtual.plusDays(7), horaEspetaculo, Periodicidade.SEMANAL);
+		Assert.assertEquals(sessoes.size(), 2);
+	}
+
+	@Test
+	public void espetaculoCriaSessoesComDataFinal7DiasDepoisDaInicialComPeriodicidadeDiariaRetorna8Sessoes() {
+		List<Sessao> sessoes = espetaculo.criaSessoes(dataAtual,
+				dataAtual.plusDays(7), horaEspetaculo, Periodicidade.DIARIA);
+		Assert.assertEquals(sessoes.size(), 8);
+	}
+
+	@Test
+	public void espetaculoCriaSessoesComAlgumaEntradaNullRetornaNull() {
+
+		Assert.assertNull(espetaculo.criaSessoes(null, dataAtual,
+				horaEspetaculo, Periodicidade.DIARIA));
+		Assert.assertNull(espetaculo.criaSessoes(dataAtual, null,
+				horaEspetaculo, Periodicidade.DIARIA));
+		Assert.assertNull(espetaculo.criaSessoes(dataAtual, dataAtual, null,
+				Periodicidade.DIARIA));
+		Assert.assertNull(espetaculo.criaSessoes(dataAtual, dataAtual,
+				horaEspetaculo, null));
+	}
+
+
+	@Test
+	public void espetaculoCriaSessoesDeveCriarSessoesConsecutivasEmOrdemComPeriodicidadeDiaria() {
+		List<Sessao> sessoes = espetaculo.criaSessoes(dataAtual, dataAtual.plusDays(1), horaEspetaculo, Periodicidade.DIARIA);
+		Assert.assertEquals(dataAtual,sessoes.get(0).getInicio().toLocalDate());
+		Assert.assertEquals(dataAtual.plusDays(1),sessoes.get(1).getInicio().toLocalDate());
 	}
 	
 	@Test
-	public void espetaculoCriaSessoesComDataInicioIgualADataFimRetorna1Sessao(){
-		Espetaculo espetaculo = new Espetaculo();
-		LocalDate dataAtual = new LocalDate();
-		LocalTime horaEspetaculo = new LocalTime(21,0);
-		List<Sessao> sessoes = espetaculo.criaSessoes(dataAtual, dataAtual, horaEspetaculo, Periodicidade.DIARIA);
-		Assert.assertEquals(sessoes.size(),1);
-		sessoes = espetaculo.criaSessoes(dataAtual, dataAtual, horaEspetaculo, Periodicidade.SEMANAL);
-		Assert.assertEquals(sessoes.size(),1);
+	public void espetaculoCriaSessoesDeveCriarSessoesConsecutivasEmOrdemComPeriodicidadeSemanal() {
+		List<Sessao> sessoes = espetaculo.criaSessoes(dataAtual, dataAtual.plusDays(8), horaEspetaculo, Periodicidade.SEMANAL);
+		Assert.assertEquals(dataAtual,sessoes.get(0).getInicio().toLocalDate());
+		Assert.assertEquals(dataAtual.plusDays(7),sessoes.get(1).getInicio().toLocalDate());
 	}
 	
 	@Test
-	public void espetaculoCriaSessoesComDataFinal7DiasDepoisDaInicialSemanalRetorna2Sessoes(){
-		Espetaculo espetaculo = new Espetaculo();
-		LocalDate dataAtual = new LocalDate();
-		LocalTime horaEspetaculo = new LocalTime(21,0);
-		List<Sessao> sessoes = espetaculo.criaSessoes(dataAtual, dataAtual.plusDays(7), horaEspetaculo, Periodicidade.SEMANAL);
-		Assert.assertEquals(sessoes.size(),2);
+	public void espetaculoCriaSessoesDeveCriarSessoesComMesmoHorario() {
+		List<Sessao> sessoes = espetaculo.criaSessoes(dataAtual, dataAtual.plusDays(1), horaEspetaculo, Periodicidade.DIARIA);
+		Assert.assertEquals(horaEspetaculo,sessoes.get(0).getInicio().toLocalTime());
+		Assert.assertEquals(horaEspetaculo,sessoes.get(1).getInicio().toLocalTime());
 	}
 	
-	@Test
-	public void espetaculoCriaSessoesComDataFinal7DiasDepoisDaInicialDiarioRetorna8Sessoes(){
-		Espetaculo espetaculo = new Espetaculo();
-		LocalDate dataAtual = new LocalDate();
-		LocalTime horaEspetaculo = new LocalTime(21,0);
-		List<Sessao> sessoes = espetaculo.criaSessoes(dataAtual, dataAtual.plusDays(7), horaEspetaculo, Periodicidade.DIARIA);
-		Assert.assertEquals(sessoes.size(),8);
-	}
-	
-	@Test
-	public void espetaculoCriaSessoesComAlgumaEntradaNullLancaException(){
-		try {
-			
-//			Assert.fail();
-		} catch (Exception e) {
-		}
+	@Before
+	public void setUp() {
+		espetaculo = new Espetaculo();
+		dataAtual = new LocalDate();
+		horaEspetaculo = new LocalTime();
 	}
 }

@@ -13,7 +13,6 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
@@ -97,12 +96,19 @@ public class Espetaculo {
 	 */
 	public List<Sessao> criaSessoes(LocalDate dataInicio, LocalDate dataFim,
 			LocalTime horario, Periodicidade periodicidade) {
+		if (dataInicio == null || dataFim == null || horario == null
+				|| periodicidade == null) {
+			return null;
+		}
+		if (dataInicio.isAfter(dataFim)) {
+			return null;
+		}
 		List<Sessao> sessoes = new ArrayList<Sessao>();
 		LocalDate proxData = dataInicio;
 		while (!proxData.isAfter(dataFim)) {
 			Sessao s = new Sessao();
 			s.setEspetaculo(this);
-			s.setInicio(dataInicio.toDateTime(horario));
+			s.setInicio(proxData.toDateTime(horario));
 			sessoes.add(s);
 			proxData = proxData
 					.plusDays(periodicidade == Periodicidade.DIARIA ? 1
@@ -111,7 +117,7 @@ public class Espetaculo {
 		return sessoes;
 	}
 
-	public boolean Vagas(int qtd, int min) {
+	public boolean vagas(int qtd, int min) {
 		// ALUNO: Não apague esse metodo. Esse sim será usado no futuro! ;)
 		int totDisp = 0;
 
