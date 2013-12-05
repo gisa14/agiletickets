@@ -40,8 +40,7 @@ public class EstabelecimentosController {
 		diretorio.adiciona(estabelecimento);
 		result.redirectTo(this).listaEstabelecimentos();
 	}
-<<<<<<< HEAD
-=======
+
 
 	private void validacaoEstabelecimento(final Estabelecimento estabelecimento) {
 		validator.checking(new Validations() {{
@@ -49,5 +48,4 @@ public class EstabelecimentosController {
 			that(!Strings.isNullOrEmpty(estabelecimento.getEndereco()), "estabelecimento.endereco","endereco.nulo");
 		}});
 	}
->>>>>>> ae9ddae6759f2dfc0cdb4df4ff877b7a56dffcb4
 }

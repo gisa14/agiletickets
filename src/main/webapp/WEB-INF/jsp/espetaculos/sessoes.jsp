@@ -15,14 +15,10 @@
 			<input type="text" name="horario" id="horario"/>
 			
 			<label for="periodo">Periodicidade</label>
-			<select name="periodo" id="periodo">
+			<select name="periodicidade" id="periodo">
 				<option value="DIARIA">Diária</option>		
 				<option value="SEMANAL">Semanal</option>			
 			</select>
-<<<<<<< HEAD
-=======
-			
->>>>>>> ae9ddae6759f2dfc0cdb4df4ff877b7a56dffcb4
 			<input type="submit" value="Criar"/>
 		</form>
 	

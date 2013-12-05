@@ -5,9 +5,7 @@ import br.com.caelum.agiletickets.domain.CriadorDeSessoesDiaria;
 import br.com.caelum.agiletickets.domain.CriadorDeSessoesSemanal;
 
 public enum Periodicidade {
-<<<<<<< HEAD
-	DIARIA, SEMANAL;
-=======
+
 	DIARIA {
 		@Override
 		public CriadorDeSessoes getCriadorDeSessoes() {
@@ -21,5 +19,5 @@ public enum Periodicidade {
 	};
 	
 	public abstract CriadorDeSessoes getCriadorDeSessoes();
->>>>>>> ae9ddae6759f2dfc0cdb4df4ff877b7a56dffcb4
+
 }

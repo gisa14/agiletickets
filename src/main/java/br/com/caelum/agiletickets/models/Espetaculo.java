@@ -83,7 +83,6 @@ public class Espetaculo {
 	}
 
 	/**
-<<<<<<< HEAD
 	 * Esse metodo eh responsavel por criar sessoes para o respectivo
 	 * espetaculo, dado o intervalo de inicio e fim, mais a periodicidade.
 	 * 

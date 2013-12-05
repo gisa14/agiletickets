@@ -32,7 +32,6 @@ public class SessaoTest {
 	}
 	
 	@Test
-<<<<<<< HEAD
 	public void verificarSeQuantidadeDeIngressosIgualQuantidadeDisponivel() throws Exception {
 		Sessao sessao = new Sessao();
 		sessao.setTotalIngressos(3);
@@ -40,11 +39,11 @@ public class SessaoTest {
 		Assert.assertTrue(sessao.podeReservar(3));
 	}
 	
-=======
+	@Test
 	public void deveVenderSeingressoDisponiveisIgualAoSolicitado() throws Exception {
 		Sessao sessao = new Sessao();
 		sessao.setTotalIngressos(2);
 		Assert.assertTrue(sessao.podeReservar(sessao.getIngressosDisponiveis()));
 	}
->>>>>>> ae9ddae6759f2dfc0cdb4df4ff877b7a56dffcb4
+
 }

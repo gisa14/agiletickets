@@ -66,16 +66,6 @@ public class EspetaculosController {
 	}
 	
 	
-
-	private void validaCampo(String valorCampo, String descricao) {
-		if (Strings.isNullOrEmpty(valorCampo)) {
-			validator.add(new ValidationMessage(descricao + "nao pode estar em branco", ""));
-		}
-		validator.onErrorRedirectTo(this).lista();
-	}
-
-
-
 	@Get @Path("/sessao/{id}")
 	public void sessao(Long id) {
 		Sessao sessao = agenda.sessao(id);
