@@ -13,8 +13,10 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import org.joda.time.Days;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
+import org.joda.time.Weeks;
 
 @Entity
 public class Espetaculo {
@@ -81,6 +83,7 @@ public class Espetaculo {
 	}
 
 	/**
+<<<<<<< HEAD
 	 * Esse metodo eh responsavel por criar sessoes para o respectivo
 	 * espetaculo, dado o intervalo de inicio e fim, mais a periodicidade.
 	 * 
@@ -145,6 +148,35 @@ public class Espetaculo {
 			return true;
 		else
 			return false;
+	}
+
+	private void populaSemanal(LocalDate inicio, LocalDate fim, LocalTime horario,
+			List<Sessao> lista, Espetaculo espetaculo) {
+		int i = 0;
+		Weeks weeks = Weeks.weeksBetween(inicio, fim);
+		do{
+			Sessao sessao = new Sessao();
+			sessao.setEspetaculo(espetaculo);
+			sessao.setInicio(inicio.toDateTime(horario).plusWeeks(i));
+			
+			lista.add(sessao);
+			i++;
+		}while(i <= weeks.getWeeks());
+	}
+
+	private int populaDiario(LocalDate inicio, LocalDate fim,LocalTime horario,
+			List<Sessao> lista, Espetaculo espetaculo) {
+		 int i = 0;
+		 Days days = Days.daysBetween(inicio, fim);
+		do{
+			Sessao sessao = new Sessao();
+			sessao.setEspetaculo(espetaculo);
+			sessao.setInicio(inicio.toDateTime(horario).plusDays(i));
+			
+			lista.add(sessao);
+			i++;
+		}while(i <= days.getDays());
+		return i;
 	}
 
 }

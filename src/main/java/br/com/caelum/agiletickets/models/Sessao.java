@@ -87,7 +87,6 @@ public class Sessao {
 		return totalIngressos - ingressosReservados;
 	}
 	
-	
 	public void reserva(Integer numeroDeIngressos) {
 		// soma quantidade na variavel ingressos reservados
 		this.ingressosReservados += numeroDeIngressos;
@@ -95,5 +94,6 @@ public class Sessao {
 
 	public boolean podeReservar(Integer numeroDeIngressos) {
 		return getIngressosDisponiveis() >= numeroDeIngressos;
+
 	}
 }
